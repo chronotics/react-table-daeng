@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 const Container = styled.div.attrs({
@@ -95,6 +96,24 @@ Table.defaultProps = {
   rows: [],
   width: '100%',
   height: '100%',
+};
+
+Table.propTypes = {
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      dataIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+    }),
+  ),
+  rows: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    }),
+  ),
+  width: PropTypes.string,
+  height: PropTypes.string,
 };
 
 export default Table;
