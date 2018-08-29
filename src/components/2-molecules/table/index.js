@@ -11,7 +11,7 @@ const Container = styled.div.attrs({
   flex-direction: column;
 `;
 
-const TableHeader = styled.div`
+const TableHead = styled.div`
   position: absolute;
   width: 100%;
   height: 50px;
@@ -50,21 +50,32 @@ class Table extends Component {
 
   render() {
     const { tableContainer, tableHeader } = this;
-    const { columns, rows, width, height } = this.props;
+    const { columns, rows, width, height, onClickCell } = this.props;
     return (
       <Container width={width} height={height} innerRef={tableContainer}>
-        <TableHeader innerRef={tableHeader}>
+        <TableHead innerRef={tableHeader}>
           {columns.map(col => (
-            <Cell key={col.key} width="100px" backgroundColor="white">
+            <Cell
+              key={col.key}
+              width="100px"
+              backgroundColor="white"
+              onClick={event => onClickCell({ event, type: 'col', col })}
+            >
               {col.title}
             </Cell>
           ))}
-        </TableHeader>
+        </TableHead>
         <TableBody>
           {rows.map(row => (
             <Row key={row.key}>
               {columns.map(col => (
-                <Cell key={col.key} width="100px">
+                <Cell
+                  key={col.key}
+                  width="100px"
+                  onClick={event =>
+                    onClickCell({ event, type: 'cell', row, col })
+                  }
+                >
                   {row[col.dataIndex]}
                 </Cell>
               ))}
@@ -96,6 +107,7 @@ Table.defaultProps = {
   rows: [],
   width: '100%',
   height: '100%',
+  onClickCell: () => console.warn('[Table] No "onClickCell" prop'),
 };
 
 Table.propTypes = {
@@ -114,6 +126,7 @@ Table.propTypes = {
   ),
   width: PropTypes.string,
   height: PropTypes.string,
+  onClickCell: PropTypes.func,
 };
 
 export default Table;
