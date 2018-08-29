@@ -11,16 +11,17 @@ const Container = styled.div.attrs({
   flex-direction: column;
 `;
 
-const TableHead = styled.div`
+const TableHead = styled.div.attrs({
+  style: props => ({ height: props.height }),
+})`
   position: absolute;
   width: 100%;
-  height: 50px;
   display: flex;
-  background-color: white;
 `;
 
-const TableBody = styled.div`
-  margin-top: 50px;
+const TableBody = styled.div.attrs({
+  style: props => ({ marginTop: props.marginTop }),
+})`
   display: flex;
   flex-direction: column;
 `;
@@ -50,10 +51,17 @@ class Table extends Component {
 
   render() {
     const { tableContainer, tableHeader } = this;
-    const { columns, rows, width, height, onClickCell } = this.props;
+    const {
+      columns,
+      rows,
+      width,
+      height,
+      headHeight,
+      onClickCell,
+    } = this.props;
     return (
       <Container width={width} height={height} innerRef={tableContainer}>
-        <TableHead innerRef={tableHeader}>
+        <TableHead innerRef={tableHeader} height={headHeight}>
           {columns.map(col => (
             <Cell
               key={col.key}
@@ -65,7 +73,7 @@ class Table extends Component {
             </Cell>
           ))}
         </TableHead>
-        <TableBody>
+        <TableBody marginTop={headHeight}>
           {rows.map(row => (
             <Row key={row.key}>
               {columns.map(col => (
@@ -107,6 +115,7 @@ Table.defaultProps = {
   rows: [],
   width: '100%',
   height: '100%',
+  headHeight: '50px',
   onClickCell: () => console.warn('[Table] No "onClickCell" prop'),
 };
 
@@ -126,6 +135,7 @@ Table.propTypes = {
   ),
   width: PropTypes.string,
   height: PropTypes.string,
+  headHeight: PropTypes.string,
   onClickCell: PropTypes.func,
 };
 
