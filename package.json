@@ -26,5 +26,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/daengdaengLee/react-table-daeng.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "daengdaengLee",
+    "email": "gunho1020@gmail.com"
   }
 }
