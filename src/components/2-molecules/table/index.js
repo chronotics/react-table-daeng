@@ -38,6 +38,7 @@ class Table extends Component {
     super(props);
     this.tableContainer = React.createRef();
     this.tableHeader = React.createRef();
+    this._fixTop = this._fixTop.bind(this);
   }
 
   render() {
@@ -68,14 +69,18 @@ class Table extends Component {
   }
 
   componentDidMount() {
-    const { tableContainer, tableHeader } = this;
-    tableContainer.current.addEventListener(
-      'scroll',
-      ({ target: { scrollTop, scrollLeft } }) => {
-        tableHeader.current.style.top = `${scrollTop}px`;
-        tableHeader.current.style.left = `${scrollLeft}px`;
-      },
-    );
+    const { tableContainer, _fixTop } = this;
+    tableContainer.current.addEventListener('scroll', _fixTop);
+  }
+
+  componentWillUnmount() {
+    const { tableContainer, _fixTop } = this;
+    tableContainer.current.removeEventHandler('scroll', _fixTop);
+  }
+
+  _fixTop({ target: { scrollTop } }) {
+    const { tableHeader } = this;
+    tableHeader.current.style.top = `${scrollTop}px`;
   }
 }
 
