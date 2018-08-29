@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Table = ({ columns, rows }) => (
-  <table>
+const Table = ({ columns, rows, width, height }) => (
+  <table style={{ width, height }}>
     <thead>
       <tr>
         {columns.map(col => (
@@ -24,6 +24,8 @@ const Table = ({ columns, rows }) => (
 Table.defaultProps = {
   columns: [],
   rows: [],
+  width: '100%',
+  height: '100%',
 };
 
 export default Table;

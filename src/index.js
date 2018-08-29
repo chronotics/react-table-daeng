@@ -13,6 +13,8 @@ ReactDOM.render(
       { key: '1', 1: '11', 2: '12', 3: '13' },
       { key: '2', 1: '21', 2: '22', 3: '23' },
     ]}
+    width="500px"
+    height="500px"
   />,
   document.getElementById('root'),
 );
