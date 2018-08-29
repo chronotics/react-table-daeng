@@ -61,33 +61,48 @@ class Table extends Component {
     return (
       <Container width={width} height={height} innerRef={tableContainer}>
         <TableHead innerRef={tableHeader} height={headHeight}>
-          {columns.map(col => (
-            <Cell
-              key={col.key}
-              width={col.width || defaultWidth}
-              backgroundColor="white"
-              onClick={event => onClickCell({ event, type: 'col', col })}
-            >
-              {col.title || ''}
-            </Cell>
-          ))}
-        </TableHead>
-        <TableBody marginTop={headHeight}>
-          {rows.map(row => (
-            <Row key={row.key} height={row.height || defaultHeight}>
-              {columns.map(col => (
+          {columns.map(
+            col =>
+              !col.renderCell ? (
                 <Cell
                   key={col.key}
                   width={col.width || defaultWidth}
-                  onClick={event =>
-                    onClickCell({ event, type: 'cell', row, col })
-                  }
+                  backgroundColor="white"
+                  onClick={event => onClickCell({ event, type: 'col', col })}
                 >
-                  {row[col.dataIndex] || ''}
+                  {col.title || ''}
                 </Cell>
-              ))}
-            </Row>
-          ))}
+              ) : (
+                col.renderCell(col)
+              ),
+          )}
+        </TableHead>
+        <TableBody marginTop={headHeight}>
+          {rows.map(
+            row =>
+              !row.renderRow ? (
+                <Row key={row.key} height={row.height || defaultHeight}>
+                  {columns.map(
+                    col =>
+                      !row.renderCell ? (
+                        <Cell
+                          key={col.key}
+                          width={col.width || defaultWidth}
+                          onClick={event =>
+                            onClickCell({ event, type: 'cell', row, col })
+                          }
+                        >
+                          {row[col.dataIndex] || ''}
+                        </Cell>
+                      ) : (
+                        row.renderCell(row, col)
+                      ),
+                  )}
+                </Row>
+              ) : (
+                row.renderRow(row, columns)
+              ),
+          )}
         </TableBody>
       </Container>
     );
@@ -126,12 +141,15 @@ Table.propTypes = {
       dataIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
         .isRequired,
       width: PropTypes.string,
+      renderCell: PropTypes.func,
     }),
   ),
   rows: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       height: PropTypes.string,
+      renderRow: PropTypes.func,
+      renderCell: PropTypes.func,
     }),
   ),
   width: PropTypes.string,
