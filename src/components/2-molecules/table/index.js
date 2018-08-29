@@ -59,17 +59,18 @@ class Table extends Component {
       headHeight,
       onClickCell,
     } = this.props;
+    const defaultCellWidth = '100px';
     return (
       <Container width={width} height={height} innerRef={tableContainer}>
         <TableHead innerRef={tableHeader} height={headHeight}>
           {columns.map(col => (
             <Cell
               key={col.key}
-              width="100px"
+              width={col.width || defaultCellWidth}
               backgroundColor="white"
               onClick={event => onClickCell({ event, type: 'col', col })}
             >
-              {col.title}
+              {col.title || ''}
             </Cell>
           ))}
         </TableHead>
@@ -79,12 +80,12 @@ class Table extends Component {
               {columns.map(col => (
                 <Cell
                   key={col.key}
-                  width="100px"
+                  width={col.width || defaultCellWidth}
                   onClick={event =>
                     onClickCell({ event, type: 'cell', row, col })
                   }
                 >
-                  {row[col.dataIndex]}
+                  {row[col.dataIndex] || ''}
                 </Cell>
               ))}
             </Row>
@@ -126,6 +127,7 @@ Table.propTypes = {
       title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       dataIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
         .isRequired,
+      width: PropTypes.string,
     }),
   ),
   rows: PropTypes.arrayOf(
