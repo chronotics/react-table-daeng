@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Container = styled.div.attrs({
   style: props => ({ width: props.width, height: props.height }),
@@ -30,8 +30,14 @@ const Row = styled.div`
 `;
 
 const Cell = styled.div.attrs({
-  style: props => ({ width: props.width }),
-})``;
+  style: props => ({ width: props.width, minWidth: props.width }),
+})`
+  ${props =>
+    props.backgroundColor &&
+    css`
+      background-color: ${props.backgroundColor};
+    `};
+`;
 
 class Table extends Component {
   constructor(props) {
@@ -48,7 +54,7 @@ class Table extends Component {
       <Container width={width} height={height} innerRef={tableContainer}>
         <TableHeader innerRef={tableHeader}>
           {columns.map(col => (
-            <Cell key={col.key} width="100px">
+            <Cell key={col.key} width="100px" backgroundColor="white">
               {col.title}
             </Cell>
           ))}

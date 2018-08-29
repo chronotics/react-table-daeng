@@ -13,17 +13,20 @@ ReactDOM.render(
   >
     <Table
       columns={[
-        { key: '1', title: 'COL_1', dataIndex: '1' },
-        { key: '2', title: 'COL_2', dataIndex: '2' },
-        { key: '3', title: 'COL_3', dataIndex: '3' },
+        ...[...Array(20)].map((v, i) => ({
+          key: `${i + 1}`,
+          title: `COL_${i + 1}`,
+          dataIndex: `${i + 1}`,
+        })),
       ]}
       rows={[
-        ...[...Array(30)].map((v, i) => ({
-          key: `${i + 1}`,
-          1: `${i + 1}-1`,
-          2: `${i + 1}-2`,
-          3: `${i + 1}-3`,
-        })),
+        ...[...Array(30)].map((v, i) => {
+          const obj = { key: `${i + 1}` };
+          [...Array(20)].forEach((v, j) => {
+            obj[j + 1] = `${i + 1}-${j + 1}`;
+          });
+          return obj;
+        }),
       ]}
       width="100%"
       height="100%"
