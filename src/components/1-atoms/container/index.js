@@ -7,6 +7,7 @@ const Container = styled.div.attrs({
   position: relative;
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 `;
 
 export default Container;
