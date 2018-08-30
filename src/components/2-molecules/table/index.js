@@ -55,13 +55,14 @@ class Table extends Component {
   }
 
   _renderColCells(col) {
-    const { onClickCell } = this.props;
+    const { onClickCell, onContextMenu } = this.props;
     return !col.renderCell ? (
       <Cell
         key={col.key}
         width={col.width || defaultWidth}
         backgroundColor={col.selected ? 'gray' : '#eae5ea'}
         onClick={event => onClickCell({ event, type: 'col', col })}
+        onContextMenu={event => onContextMenu({ event, type: 'col', col })}
       >
         {col.title || ''}
       </Cell>
@@ -71,7 +72,7 @@ class Table extends Component {
   }
 
   _renderRowCells(row, idx) {
-    const { columns, onClickCell } = this.props;
+    const { columns, onClickCell, onContextMenu } = this.props;
     return !row.renderRow ? (
       <Row key={row.key} height={row.height || defaultHeight}>
         {columns.map(
@@ -82,6 +83,9 @@ class Table extends Component {
                 width={col.width || defaultWidth}
                 onClick={event =>
                   onClickCell({ event, type: 'cell', row, col })
+                }
+                onContextMenu={event =>
+                  onContextMenu({ event, type: 'cell', row, col })
                 }
                 backgroundColor={
                   col.selected || row.selected
@@ -111,6 +115,7 @@ Table.defaultProps = {
   height: '100%',
   headHeight: '50px',
   onClickCell: () => console.warn('[Table] No "onClickCell" prop'),
+  onContextMenu: () => console.warn('[Table] No "onContextMenu" prop'),
 };
 
 Table.propTypes = {
@@ -138,6 +143,7 @@ Table.propTypes = {
   height: PropTypes.string,
   headHeight: PropTypes.string,
   onClickCell: PropTypes.func,
+  onContextMenu: PropTypes.func,
 };
 
 export default Table;
