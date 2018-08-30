@@ -20,9 +20,21 @@ class Table extends Component {
 
   render() {
     const { tableHeader, _fixTop, _renderColCells, _renderRowCells } = this;
-    const { columns, rows, width, height, headHeight } = this.props;
+    const {
+      columns,
+      rows,
+      width,
+      height,
+      headHeight,
+      setScrollRef,
+    } = this.props;
     return (
-      <Container width={width} height={height} onScroll={_fixTop}>
+      <Container
+        width={width}
+        height={height}
+        onScroll={_fixTop}
+        innerRef={setScrollRef}
+      >
         <TableHead innerRef={tableHeader} height={headHeight}>
           {columns.map(_renderColCells)}
         </TableHead>
@@ -100,6 +112,7 @@ Table.defaultProps = {
   headHeight: '50px',
   onClickCell: () => console.warn('[Table] No "onClickCell" prop'),
   onContextMenu: () => console.warn('[Table] No "onContextMenu" prop'),
+  setScrollRef: () => {},
 };
 
 Table.propTypes = {
@@ -128,6 +141,7 @@ Table.propTypes = {
   headHeight: PropTypes.string,
   onClickCell: PropTypes.func,
   onContextMenu: PropTypes.func,
+  setScrollRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 };
 
 export default Table;
