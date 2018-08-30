@@ -12,7 +12,6 @@ const defaultHeight = '50px';
 class Table extends Component {
   constructor(props) {
     super(props);
-    this.tableContainer = React.createRef();
     this.tableHeader = React.createRef();
     this._fixTop = this._fixTop.bind(this);
     this._renderColCells = this._renderColCells.bind(this);
@@ -20,15 +19,10 @@ class Table extends Component {
   }
 
   render() {
-    const {
-      tableContainer,
-      tableHeader,
-      _renderColCells,
-      _renderRowCells,
-    } = this;
+    const { tableHeader, _fixTop, _renderColCells, _renderRowCells } = this;
     const { columns, rows, width, height, headHeight } = this.props;
     return (
-      <Container width={width} height={height} innerRef={tableContainer}>
+      <Container width={width} height={height} onScroll={_fixTop}>
         <TableHead innerRef={tableHeader} height={headHeight}>
           {columns.map(_renderColCells)}
         </TableHead>
@@ -37,16 +31,6 @@ class Table extends Component {
         </TableBody>
       </Container>
     );
-  }
-
-  componentDidMount() {
-    const { tableContainer, _fixTop } = this;
-    tableContainer.current.addEventListener('scroll', _fixTop);
-  }
-
-  componentWillUnmount() {
-    const { tableContainer, _fixTop } = this;
-    tableContainer.current.removeEventListener('scroll', _fixTop);
   }
 
   _fixTop({ target: { scrollTop } }) {
