@@ -60,7 +60,7 @@ class Table extends Component {
       <Cell
         key={col.key}
         width={col.width || defaultWidth}
-        backgroundColor="white"
+        backgroundColor={col.selected ? 'gray' : 'white'}
         onClick={event => onClickCell({ event, type: 'col', col })}
       >
         {col.title || ''}
@@ -82,6 +82,9 @@ class Table extends Component {
                 width={col.width || defaultWidth}
                 onClick={event =>
                   onClickCell({ event, type: 'cell', row, col })
+                }
+                backgroundColor={
+                  col.selected || row.selected ? 'gray' : 'white'
                 }
               >
                 {row[col.dataIndex] || ''}
@@ -115,6 +118,7 @@ Table.propTypes = {
         .isRequired,
       width: PropTypes.string,
       renderCell: PropTypes.func,
+      selected: PropTypes.bool,
     }),
   ),
   rows: PropTypes.arrayOf(
@@ -123,6 +127,7 @@ Table.propTypes = {
       height: PropTypes.string,
       renderRow: PropTypes.func,
       renderCell: PropTypes.func,
+      selected: PropTypes.bool,
     }),
   ),
   width: PropTypes.string,
