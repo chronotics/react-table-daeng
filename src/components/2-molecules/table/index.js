@@ -38,71 +38,34 @@ const Cell = styled.div.attrs({
   background-color: ${props => props.backgroundColor};
 `;
 
+const defaultWidth = '100px';
+const defaultHeight = '50px';
+
 class Table extends Component {
   constructor(props) {
     super(props);
     this.tableContainer = React.createRef();
     this.tableHeader = React.createRef();
     this._fixTop = this._fixTop.bind(this);
+    this._renderColCells = this._renderColCells.bind(this);
+    this._renderRowCells = this._renderRowCells.bind(this);
   }
 
   render() {
-    const { tableContainer, tableHeader } = this;
     const {
-      columns,
-      rows,
-      width,
-      height,
-      headHeight,
-      onClickCell,
-    } = this.props;
-    const defaultWidth = '100px';
-    const defaultHeight = '50px';
+      tableContainer,
+      tableHeader,
+      _renderColCells,
+      _renderRowCells,
+    } = this;
+    const { columns, rows, width, height, headHeight } = this.props;
     return (
       <Container width={width} height={height} innerRef={tableContainer}>
         <TableHead innerRef={tableHeader} height={headHeight}>
-          {columns.map(
-            col =>
-              !col.renderCell ? (
-                <Cell
-                  key={col.key}
-                  width={col.width || defaultWidth}
-                  backgroundColor="white"
-                  onClick={event => onClickCell({ event, type: 'col', col })}
-                >
-                  {col.title || ''}
-                </Cell>
-              ) : (
-                col.renderCell(col)
-              ),
-          )}
+          {columns.map(_renderColCells)}
         </TableHead>
         <TableBody marginTop={headHeight}>
-          {rows.map(
-            row =>
-              !row.renderRow ? (
-                <Row key={row.key} height={row.height || defaultHeight}>
-                  {columns.map(
-                    col =>
-                      !row.renderCell ? (
-                        <Cell
-                          key={col.key}
-                          width={col.width || defaultWidth}
-                          onClick={event =>
-                            onClickCell({ event, type: 'cell', row, col })
-                          }
-                        >
-                          {row[col.dataIndex] || ''}
-                        </Cell>
-                      ) : (
-                        row.renderCell(row, col)
-                      ),
-                  )}
-                </Row>
-              ) : (
-                row.renderRow(row, columns)
-              ),
-          )}
+          {rows.map(_renderRowCells)}
         </TableBody>
       </Container>
     );
@@ -121,6 +84,48 @@ class Table extends Component {
   _fixTop({ target: { scrollTop } }) {
     const { tableHeader } = this;
     tableHeader.current.style.top = `${scrollTop}px`;
+  }
+
+  _renderColCells(col) {
+    const { onClickCell } = this.props;
+    return !col.renderCell ? (
+      <Cell
+        key={col.key}
+        width={col.width || defaultWidth}
+        backgroundColor="white"
+        onClick={event => onClickCell({ event, type: 'col', col })}
+      >
+        {col.title || ''}
+      </Cell>
+    ) : (
+      col.renderCell(col)
+    );
+  }
+
+  _renderRowCells(row) {
+    const { columns, onClickCell } = this.props;
+    return !row.renderRow ? (
+      <Row key={row.key} height={row.height || defaultHeight}>
+        {columns.map(
+          col =>
+            !row.renderCell ? (
+              <Cell
+                key={col.key}
+                width={col.width || defaultWidth}
+                onClick={event =>
+                  onClickCell({ event, type: 'cell', row, col })
+                }
+              >
+                {row[col.dataIndex] || ''}
+              </Cell>
+            ) : (
+              row.renderCell(row, col)
+            ),
+        )}
+      </Row>
+    ) : (
+      row.renderRow(row, columns)
+    );
   }
 }
 
