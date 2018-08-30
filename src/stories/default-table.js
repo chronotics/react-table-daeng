@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table } from '../components/index';
+import { Table } from '../components';
 
 class DefaultTable extends Component {
   constructor(props) {
