@@ -12,23 +12,30 @@ const defaultHeight = '50px';
 class Table extends Component {
   constructor(props) {
     super(props);
-    this.tableContainer = React.createRef();
     this.tableHeader = React.createRef();
+    this._onScroll = this._onScroll.bind(this);
     this._fixTop = this._fixTop.bind(this);
     this._renderColCells = this._renderColCells.bind(this);
     this._renderRowCells = this._renderRowCells.bind(this);
   }
 
   render() {
+    const { tableHeader, _onScroll, _renderColCells, _renderRowCells } = this;
     const {
-      tableContainer,
-      tableHeader,
-      _renderColCells,
-      _renderRowCells,
-    } = this;
-    const { columns, rows, width, height, headHeight } = this.props;
+      columns,
+      rows,
+      width,
+      height,
+      headHeight,
+      setScrollRef,
+    } = this.props;
     return (
-      <Container width={width} height={height} innerRef={tableContainer}>
+      <Container
+        width={width}
+        height={height}
+        onScroll={_onScroll}
+        innerRef={setScrollRef}
+      >
         <TableHead innerRef={tableHeader} height={headHeight}>
           {columns.map(_renderColCells)}
         </TableHead>
@@ -39,14 +46,11 @@ class Table extends Component {
     );
   }
 
-  componentDidMount() {
-    const { tableContainer, _fixTop } = this;
-    tableContainer.current.addEventListener('scroll', _fixTop);
-  }
-
-  componentWillUnmount() {
-    const { tableContainer, _fixTop } = this;
-    tableContainer.current.removeEventListener('scroll', _fixTop);
+  _onScroll(event) {
+    const { _fixTop } = this;
+    const { onScroll } = this.props;
+    _fixTop(event);
+    onScroll(event);
   }
 
   _fixTop({ target: { scrollTop } }) {
@@ -116,6 +120,8 @@ Table.defaultProps = {
   headHeight: '50px',
   onClickCell: () => console.warn('[Table] No "onClickCell" prop'),
   onContextMenu: () => console.warn('[Table] No "onContextMenu" prop'),
+  onScroll: () => console.warn('[Table] No "onScroll" prop'),
+  setScrollRef: () => {},
 };
 
 Table.propTypes = {
@@ -144,6 +150,8 @@ Table.propTypes = {
   headHeight: PropTypes.string,
   onClickCell: PropTypes.func,
   onContextMenu: PropTypes.func,
+  onScroll: PropTypes.func,
+  setScrollRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 };
 
 export default Table;
