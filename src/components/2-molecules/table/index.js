@@ -13,13 +13,14 @@ class Table extends Component {
   constructor(props) {
     super(props);
     this.tableHeader = React.createRef();
+    this._onScroll = this._onScroll.bind(this);
     this._fixTop = this._fixTop.bind(this);
     this._renderColCells = this._renderColCells.bind(this);
     this._renderRowCells = this._renderRowCells.bind(this);
   }
 
   render() {
-    const { tableHeader, _fixTop, _renderColCells, _renderRowCells } = this;
+    const { tableHeader, _onScroll, _renderColCells, _renderRowCells } = this;
     const {
       columns,
       rows,
@@ -32,7 +33,7 @@ class Table extends Component {
       <Container
         width={width}
         height={height}
-        onScroll={_fixTop}
+        onScroll={_onScroll}
         innerRef={setScrollRef}
       >
         <TableHead innerRef={tableHeader} height={headHeight}>
@@ -43,6 +44,13 @@ class Table extends Component {
         </TableBody>
       </Container>
     );
+  }
+
+  _onScroll(event) {
+    const { _fixTop } = this;
+    const { onScroll } = this.props;
+    _fixTop(event);
+    onScroll(event);
   }
 
   _fixTop({ target: { scrollTop } }) {
@@ -112,6 +120,7 @@ Table.defaultProps = {
   headHeight: '50px',
   onClickCell: () => console.warn('[Table] No "onClickCell" prop'),
   onContextMenu: () => console.warn('[Table] No "onContextMenu" prop'),
+  onScroll: () => console.warn('[Table] No "onScroll" prop'),
   setScrollRef: () => {},
 };
 
@@ -141,6 +150,7 @@ Table.propTypes = {
   headHeight: PropTypes.string,
   onClickCell: PropTypes.func,
   onContextMenu: PropTypes.func,
+  onScroll: PropTypes.func,
   setScrollRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 };
 
