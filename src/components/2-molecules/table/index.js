@@ -1,42 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-
-const Container = styled.div.attrs({
-  style: props => ({ width: props.width, height: props.height }),
-})`
-  overflow: auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-`;
-
-const TableHead = styled.div.attrs({
-  style: props => ({ height: props.height }),
-})`
-  position: absolute;
-  width: 100%;
-  display: flex;
-`;
-
-const TableBody = styled.div.attrs({
-  style: props => ({ marginTop: props.marginTop }),
-})`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Row = styled.div.attrs({
-  style: props => ({ height: props.height, minHeight: props.height }),
-})`
-  display: flex;
-`;
-
-const Cell = styled.div.attrs({
-  style: props => ({ width: props.width, minWidth: props.width }),
-})`
-  background-color: ${props => props.backgroundColor};
-`;
+import Container from '../../1-atoms/container';
+import TableHead from '../../1-atoms/table-head';
+import TableBody from '../../1-atoms/table-body';
+import Row from '../../1-atoms/row';
+import Cell from '../../1-atoms/cell';
 
 const defaultWidth = '100px';
 const defaultHeight = '50px';
