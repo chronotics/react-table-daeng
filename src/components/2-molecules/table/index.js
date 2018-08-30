@@ -46,7 +46,7 @@ class Table extends Component {
 
   componentWillUnmount() {
     const { tableContainer, _fixTop } = this;
-    tableContainer.current.removeEventHandler('scroll', _fixTop);
+    tableContainer.current.removeEventListener('scroll', _fixTop);
   }
 
   _fixTop({ target: { scrollTop } }) {
