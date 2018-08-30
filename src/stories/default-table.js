@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import styled from 'styled-components';
-import { Table } from './components';
+import { Table } from '../components';
 
-const Container = styled.div`
-  width: 600px;
-  height: 600px;
-  border: 1px solid blue;
-  box-sizing: border-box;
-`;
-
-class App extends Component {
+class DefaultTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,15 +28,13 @@ class App extends Component {
     const { _onClickCell } = this;
     const { columns, rows } = this.state;
     return (
-      <Container>
-        <Table
-          columns={columns}
-          rows={rows}
-          width="100%"
-          height="100%"
-          onClickCell={_onClickCell}
-        />
-      </Container>
+      <Table
+        width="500px"
+        height="500px"
+        columns={columns}
+        rows={rows}
+        onClickCell={_onClickCell}
+      />
     );
   }
 
@@ -54,4 +43,4 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+export default DefaultTable;
