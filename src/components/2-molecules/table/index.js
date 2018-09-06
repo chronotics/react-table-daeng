@@ -59,24 +59,32 @@ class Table extends Component {
   }
 
   _renderColCells(col) {
-    const { onClickCell, onContextMenu } = this.props;
+    const { selectedCols, onClickCell, onContextMenu } = this.props;
     return !col.renderCell ? (
       <Cell
         key={col.key}
         width={col.width || defaultWidth}
-        backgroundColor={col.selected ? 'gray' : '#eae5ea'}
+        backgroundColor={
+          selectedCols.includes(col.key) || col.selected ? 'gray' : '#eae5ea'
+        }
         onClick={event => onClickCell({ event, type: 'col', col })}
         onContextMenu={event => onContextMenu({ event, type: 'col', col })}
       >
         {col.title || ''}
       </Cell>
     ) : (
-      col.renderCell(col)
+      col.renderCell(col, selectedCols)
     );
   }
 
   _renderRowCells(row, idx) {
-    const { columns, onClickCell, onContextMenu } = this.props;
+    const {
+      columns,
+      selectedCols,
+      selectedRows,
+      onClickCell,
+      onContextMenu,
+    } = this.props;
     return !row.renderRow ? (
       <Row key={row.key} height={row.height || defaultHeight}>
         {columns.map(
@@ -92,7 +100,10 @@ class Table extends Component {
                   onContextMenu({ event, type: 'cell', row, col })
                 }
                 backgroundColor={
-                  col.selected || row.selected
+                  selectedCols.includes(col.key) ||
+                  selectedRows.includes(row.key) ||
+                  col.selected ||
+                  row.selected
                     ? 'gray'
                     : idx % 2 === 0
                       ? '#ffffff'
@@ -102,12 +113,12 @@ class Table extends Component {
                 {row[col.dataIndex] || ''}
               </Cell>
             ) : (
-              row.renderCell(row, col)
+              row.renderCell(row, col, selectedRows, selectedCols)
             ),
         )}
       </Row>
     ) : (
-      row.renderRow(row, columns)
+      row.renderRow(row, columns, selectedRows, selectedCols)
     );
   }
 }
@@ -115,6 +126,8 @@ class Table extends Component {
 Table.defaultProps = {
   columns: [],
   rows: [],
+  selectedCols: [],
+  selectedRows: [],
   width: '100%',
   height: '100%',
   headHeight: '50px',
@@ -144,6 +157,12 @@ Table.propTypes = {
       renderCell: PropTypes.func,
       selected: PropTypes.bool,
     }),
+  ),
+  selectedCols: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  ),
+  selectedRows: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   ),
   width: PropTypes.string,
   height: PropTypes.string,
