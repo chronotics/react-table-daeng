@@ -6,9 +6,6 @@ import TableBody from '../../1-atoms/table-body';
 import Row from '../../1-atoms/row';
 import Cell from '../../1-atoms/cell';
 
-const defaultWidth = '100px';
-const defaultHeight = '50px';
-
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +23,7 @@ class Table extends Component {
       rows,
       width,
       height,
-      headHeight,
+      cellHeight,
       setScrollRef,
     } = this.props;
     return (
@@ -36,10 +33,10 @@ class Table extends Component {
         onScroll={_onScroll}
         innerRef={setScrollRef}
       >
-        <TableHead innerRef={tableHeader} height={headHeight}>
+        <TableHead innerRef={tableHeader} height={cellHeight}>
           {columns.map(_renderColCells)}
         </TableHead>
-        <TableBody marginTop={headHeight}>
+        <TableBody marginTop={cellHeight}>
           {rows.map(_renderRowCells)}
         </TableBody>
       </Container>
@@ -59,11 +56,11 @@ class Table extends Component {
   }
 
   _renderColCells(col) {
-    const { selectedCols, onClickCell, onContextMenu } = this.props;
+    const { selectedCols, onClickCell, onContextMenu, cellWidth } = this.props;
     return !col.renderCell ? (
       <Cell
         key={col.key}
-        width={col.width || defaultWidth}
+        width={col.width || cellWidth}
         backgroundColor={
           selectedCols.includes(col.key) || col.selected ? 'gray' : '#eae5ea'
         }
@@ -82,17 +79,19 @@ class Table extends Component {
       columns,
       selectedCols,
       selectedRows,
+      cellWidth,
+      cellHeight,
       onClickCell,
       onContextMenu,
     } = this.props;
     return !row.renderRow ? (
-      <Row key={row.key} height={row.height || defaultHeight}>
+      <Row key={row.key} height={row.height || cellHeight}>
         {columns.map(
           col =>
             !row.renderCell ? (
               <Cell
                 key={col.key}
-                width={col.width || defaultWidth}
+                width={col.width || cellWidth}
                 onClick={event =>
                   onClickCell({ event, type: 'cell', row, col })
                 }
@@ -130,7 +129,8 @@ Table.defaultProps = {
   selectedRows: [],
   width: '100%',
   height: '100%',
-  headHeight: '50px',
+  cellWidth: '100px',
+  cellHeight: '50px',
   onClickCell: () => console.warn('[Table] No "onClickCell" prop'),
   onContextMenu: () => console.warn('[Table] No "onContextMenu" prop'),
   onScroll: () => console.warn('[Table] No "onScroll" prop'),
@@ -166,7 +166,8 @@ Table.propTypes = {
   ),
   width: PropTypes.string,
   height: PropTypes.string,
-  headHeight: PropTypes.string,
+  cellWidth: PropTypes.string,
+  cellHeight: PropTypes.string,
   onClickCell: PropTypes.func,
   onContextMenu: PropTypes.func,
   onScroll: PropTypes.func,
