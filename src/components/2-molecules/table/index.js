@@ -25,6 +25,7 @@ class Table extends Component {
       height,
       cellHeight,
       setScrollRef,
+      onClickTable,
     } = this.props;
     return (
       <Container
@@ -32,6 +33,7 @@ class Table extends Component {
         height={height}
         onScroll={_onScroll}
         innerRef={setScrollRef}
+        onClick={onClickTable}
       >
         <TableHead innerRef={tableHeader} height={cellHeight}>
           {columns.map(_renderColCells)}
@@ -131,9 +133,10 @@ Table.defaultProps = {
   height: '100%',
   cellWidth: '100px',
   cellHeight: '50px',
-  onClickCell: () => console.warn('[Table] No "onClickCell" prop'),
-  onContextMenu: () => console.warn('[Table] No "onContextMenu" prop'),
-  onScroll: () => console.warn('[Table] No "onScroll" prop'),
+  onClickTable: () => {},
+  onClickCell: () => {},
+  onContextMenu: () => {},
+  onScroll: () => {},
   setScrollRef: () => {},
 };
 
@@ -168,6 +171,7 @@ Table.propTypes = {
   height: PropTypes.string,
   cellWidth: PropTypes.string,
   cellHeight: PropTypes.string,
+  onClickTable: PropTypes.func,
   onClickCell: PropTypes.func,
   onContextMenu: PropTypes.func,
   onScroll: PropTypes.func,
