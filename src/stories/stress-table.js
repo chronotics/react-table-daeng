@@ -26,14 +26,14 @@ class ContextMenuTable extends Component {
     this.state = {
       columns: [
         ...[...Array(COL_NUM)].map((v, i) => ({
-          key: `${i + 1}`,
-          title: `COL_${i + 1}`,
-          dataIndex: `${i + 1}`,
+          _key_: `${i + 1}`,
+          _title_: `COL_${i + 1}`,
+          _dataIndex_: `${i + 1}`,
         })),
       ],
       rows: [
         ...[...Array(ROW_NUM)].map((v, i) => {
-          const obj = { key: `${i + 1}` };
+          const obj = { _key_: `${i + 1}` };
           [...Array(COL_NUM)].forEach((v, j) => {
             obj[j + 1] = `${i + 1}-${j + 1}`;
           });
@@ -90,8 +90,8 @@ class ContextMenuTable extends Component {
       onOff: true,
       x: event.clientX,
       y: event.clientY,
-      rowKey: row ? row.key : 'None',
-      colKey: col.key,
+      rowKey: row ? row._key_ : 'None',
+      colKey: col._key_,
     });
   }
 }

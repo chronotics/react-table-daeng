@@ -3,14 +3,14 @@ import { Table } from '../components';
 
 const generateColumns = num =>
   [...Array(num)].map((v, i) => ({
-    key: `${i + 1}`,
-    title: `COL_${i + 1}`,
-    dataIndex: `${i + 1}`,
+    _key_: `${i + 1}`,
+    _title_: `COL_${i + 1}`,
+    _dataIndex_: `${i + 1}`,
   }));
 
 const generateRows = (rowNum, colNum, start) =>
   [...Array(rowNum)].map((v, i) => {
-    const obj = { key: `${i + start}` };
+    const obj = { _key_: `${i + start}` };
     [...Array(colNum)].forEach((v, j) => {
       obj[j + 1] = `${i + start}-${j + 1}`;
     });
@@ -89,7 +89,7 @@ class InfiniteTable extends Component {
     switch (type) {
     case 'col':
       this.setState({
-        selectedCols: [col.key],
+        selectedCols: [col._key_],
         selectedRows: [],
         contextMenu: {
           onOff: false,
@@ -103,7 +103,7 @@ class InfiniteTable extends Component {
     case 'cell':
       this.setState({
         selectedCols: [],
-        selectedRows: [row.key],
+        selectedRows: [row._key_],
         contextMenu: {
           onOff: false,
           x: 0,
@@ -124,8 +124,8 @@ class InfiniteTable extends Component {
         onOff: true,
         x: event.clientX,
         y: event.clientY,
-        row: row ? row.key : 'None',
-        col: col.key,
+        row: row ? row._key_ : 'None',
+        col: col._key_,
       },
     });
   }

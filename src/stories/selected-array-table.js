@@ -9,12 +9,12 @@ class SelectTable extends Component {
     super(props);
     this.state = {
       columns: [...Array(COL_COUNT)].map((v, i) => ({
-        key: `${i + 1}`,
-        title: `COL_${i + 1}`,
-        dataIndex: `${i + 1}`,
+        _key_: `${i + 1}`,
+        _title_: `COL_${i + 1}`,
+        _dataIndex_: `${i + 1}`,
       })),
       rows: [...Array(ROW_COUNT)].map((v, i) => {
-        const obj = { key: `${i + 1}` };
+        const obj = { _key_: `${i + 1}` };
         [...Array(COL_COUNT)].forEach((v, j) => {
           obj[j + 1] = `${i + 1}-${j + 1}`;
         });
@@ -49,19 +49,19 @@ class SelectTable extends Component {
     type === 'col' ? _onClickCol(event, col) : _onClickRow(event, row);
   }
 
-  _onClickCol(e, { key }) {
+  _onClickCol(e, { _key_ }) {
     this.setState(prevState => ({
       ...prevState,
-      selectedCols: [key],
+      selectedCols: [_key_],
       selectedRows: [],
     }));
   }
 
-  _onClickRow(e, { key }) {
+  _onClickRow(e, { _key_ }) {
     this.setState(prevState => ({
       ...prevState,
       selectedCols: [],
-      selectedRows: [key],
+      selectedRows: [_key_],
     }));
   }
 }
