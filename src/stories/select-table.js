@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
 import { Table } from '../components';
 
-const unselectAllRows = rows => rows.map(row => ({ ...row, selected: false }));
+const unselectAllRows = rows =>
+  rows.map(row => ({ ...row, _selected_: false }));
 
 const unselectAllColumns = columns =>
-  columns.map(col => ({ ...col, selected: false }));
+  columns.map(col => ({ ...col, _selected_: false }));
 
 const selectOneCol = (columns, key) => {
-  const colIndex = columns.findIndex(col => col.key === key);
+  const colIndex = columns.findIndex(col => col._key_ === key);
   return [
-    ...columns.slice(0, colIndex).map(col => ({ ...col, selected: false })),
-    { ...columns[colIndex], selected: true },
-    ...columns.slice(colIndex + 1).map(col => ({ ...col, selected: false })),
+    ...columns.slice(0, colIndex).map(col => ({ ...col, _selected_: false })),
+    { ...columns[colIndex], _selected_: true },
+    ...columns.slice(colIndex + 1).map(col => ({ ...col, _selected_: false })),
   ];
 };
 
 const selectOneRow = (rows, key) => {
-  const rowIndex = rows.findIndex(row => row.key === key);
+  const rowIndex = rows.findIndex(row => row._key_ === key);
   return [
-    ...rows.slice(0, rowIndex).map(row => ({ ...row, selected: false })),
-    { ...rows[rowIndex], selected: true },
-    ...rows.slice(rowIndex + 1).map(row => ({ ...row, selected: false })),
+    ...rows.slice(0, rowIndex).map(row => ({ ...row, _selected_: false })),
+    { ...rows[rowIndex], _selected_: true },
+    ...rows.slice(rowIndex + 1).map(row => ({ ...row, _selected_: false })),
   ];
 };
 
@@ -30,15 +31,15 @@ class SelectTable extends Component {
     this.state = {
       columns: [
         ...[...Array(20)].map((v, i) => ({
-          key: `${i + 1}`,
-          title: `COL_${i + 1}`,
-          dataIndex: `${i + 1}`,
-          selected: false,
+          _key_: `${i + 1}`,
+          _title_: `COL_${i + 1}`,
+          _dataIndex_: `${i + 1}`,
+          _selected_: false,
         })),
       ],
       rows: [
         ...[...Array(30)].map((v, i) => {
-          const obj = { key: `${i + 1}`, selected: false };
+          const obj = { _key_: `${i + 1}`, _selected_: false };
           [...Array(20)].forEach((v, j) => {
             obj[j + 1] = `${i + 1}-${j + 1}`;
           });
@@ -70,19 +71,19 @@ class SelectTable extends Component {
     type === 'col' ? _onClickCol(event, col) : _onClickRow(event, row);
   }
 
-  _onClickCol(e, { key }) {
+  _onClickCol(e, { _key_ }) {
     this.setState(prevState => ({
       ...prevState,
       rows: unselectAllRows(prevState.rows),
-      columns: selectOneCol(prevState.columns, key),
+      columns: selectOneCol(prevState.columns, _key_),
     }));
   }
 
-  _onClickRow(e, { key }) {
+  _onClickRow(e, { _key_ }) {
     this.setState(prevState => ({
       ...prevState,
       columns: unselectAllColumns(prevState.columns),
-      rows: selectOneRow(prevState.rows, key),
+      rows: selectOneRow(prevState.rows, _key_),
     }));
   }
 }

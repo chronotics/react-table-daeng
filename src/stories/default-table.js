@@ -7,14 +7,14 @@ class DefaultTable extends Component {
     this.state = {
       columns: [
         ...[...Array(20)].map((v, i) => ({
-          key: `${i + 1}`,
-          title: `COL_${i + 1}`,
-          dataIndex: `${i + 1}`,
+          _key_: `${i + 1}`,
+          _title_: `COL_${i + 1}`,
+          _dataIndex_: `${i + 1}`,
         })),
       ],
       rows: [
         ...[...Array(30)].map((v, i) => {
-          const obj = { key: `${i + 1}` };
+          const obj = { _key_: `${i + 1}` };
           [...Array(20)].forEach((v, j) => {
             obj[j + 1] = `${i + 1}-${j + 1}`;
           });

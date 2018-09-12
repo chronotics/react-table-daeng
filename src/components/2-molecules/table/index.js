@@ -9,7 +9,7 @@ import Cell from '../../1-atoms/cell';
 class Table extends Component {
   constructor(props) {
     super(props);
-    this.tableHeader = React.createRef();
+    this._tableHeader = React.createRef();
     this._onScroll = this._onScroll.bind(this);
     this._fixTop = this._fixTop.bind(this);
     this._renderColCells = this._renderColCells.bind(this);
@@ -17,7 +17,7 @@ class Table extends Component {
   }
 
   render() {
-    const { tableHeader, _onScroll, _renderColCells, _renderRowCells } = this;
+    const { _tableHeader, _onScroll, _renderColCells, _renderRowCells } = this;
     const {
       columns,
       rows,
@@ -35,7 +35,7 @@ class Table extends Component {
         innerRef={setScrollRef}
         onClick={onClickTable}
       >
-        <TableHead innerRef={tableHeader} height={cellHeight}>
+        <TableHead innerRef={_tableHeader} height={cellHeight}>
           {columns.map(_renderColCells)}
         </TableHead>
         <TableBody marginTop={cellHeight}>
@@ -53,26 +53,28 @@ class Table extends Component {
   }
 
   _fixTop({ target: { scrollTop } }) {
-    const { tableHeader } = this;
-    tableHeader.current.style.top = `${scrollTop}px`;
+    const { _tableHeader } = this;
+    _tableHeader.current.style.top = `${scrollTop}px`;
   }
 
   _renderColCells(col) {
     const { selectedCols, onClickCell, onContextMenu, cellWidth } = this.props;
-    return !col.renderCell ? (
+    return !col._renderCell_ ? (
       <Cell
-        key={col.key}
-        width={col.width || cellWidth}
+        key={col._key_}
+        width={col._width_ || cellWidth}
         backgroundColor={
-          selectedCols.includes(col.key) || col.selected ? 'gray' : '#eae5ea'
+          selectedCols.includes(col._key_) || col._selected_
+            ? 'gray'
+            : '#eae5ea'
         }
         onClick={event => onClickCell({ event, type: 'col', col })}
         onContextMenu={event => onContextMenu({ event, type: 'col', col })}
       >
-        {col.title || ''}
+        {col._title_ || ''}
       </Cell>
     ) : (
-      col.renderCell(col, selectedCols)
+      col._renderCell_(col, selectedCols)
     );
   }
 
@@ -86,14 +88,14 @@ class Table extends Component {
       onClickCell,
       onContextMenu,
     } = this.props;
-    return !row.renderRow ? (
-      <Row key={row.key} height={row.height || cellHeight}>
+    return !row._renderRow_ ? (
+      <Row key={row._key_} height={row._height_ || cellHeight}>
         {columns.map(
           col =>
-            !row.renderCell ? (
+            !row._renderCell_ ? (
               <Cell
-                key={col.key}
-                width={col.width || cellWidth}
+                key={col._key_}
+                width={col._width_ || cellWidth}
                 onClick={event =>
                   onClickCell({ event, type: 'cell', row, col })
                 }
@@ -101,25 +103,25 @@ class Table extends Component {
                   onContextMenu({ event, type: 'cell', row, col })
                 }
                 backgroundColor={
-                  selectedCols.includes(col.key) ||
-                  selectedRows.includes(row.key) ||
-                  col.selected ||
-                  row.selected
+                  selectedCols.includes(col._key_) ||
+                  selectedRows.includes(row._key_) ||
+                  col._selected_ ||
+                  row._selected_
                     ? 'gray'
                     : idx % 2 === 0
                       ? '#ffffff'
                       : '#f4f2f4'
                 }
               >
-                {row[col.dataIndex] || ''}
+                {row[col._dataIndex_] || ''}
               </Cell>
             ) : (
-              row.renderCell(row, col, selectedRows, selectedCols)
+              row._renderCell_(row, col, selectedRows, selectedCols)
             ),
         )}
       </Row>
     ) : (
-      row.renderRow(row, columns, selectedRows, selectedCols)
+      row._renderRow_(row, columns, selectedRows, selectedCols)
     );
   }
 }
@@ -143,22 +145,24 @@ Table.defaultProps = {
 Table.propTypes = {
   columns: PropTypes.arrayOf(
     PropTypes.shape({
-      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      dataIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      _key_: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
         .isRequired,
-      width: PropTypes.string,
-      renderCell: PropTypes.func,
-      selected: PropTypes.bool,
+      _title_: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      _dataIndex_: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+      _width_: PropTypes.string,
+      _renderCell_: PropTypes.func,
+      _selected_: PropTypes.bool,
     }),
   ),
   rows: PropTypes.arrayOf(
     PropTypes.shape({
-      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      height: PropTypes.string,
-      renderRow: PropTypes.func,
-      renderCell: PropTypes.func,
-      selected: PropTypes.bool,
+      _key_: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+      _height_: PropTypes.string,
+      _renderRow_: PropTypes.func,
+      _renderCell_: PropTypes.func,
+      _selected_: PropTypes.bool,
     }),
   ),
   selectedCols: PropTypes.arrayOf(
