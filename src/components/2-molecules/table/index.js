@@ -57,17 +57,14 @@ class Table extends Component {
     _tableHeader.current.style.top = `${scrollTop}px`;
   }
 
-  _renderColCells(col) {
+  _renderColCells(col, idx) {
     const { selectedCols, onClickCell, onContextMenu, cellWidth } = this.props;
     return !col._renderCell_ ? (
       <Cell
         key={col._key_}
         width={col._width_ || cellWidth}
-        backgroundColor={
-          selectedCols.includes(col._key_) || col._selected_
-            ? 'gray'
-            : '#eae5ea'
-        }
+        border={{ top: false, left: idx !== 0 }}
+        defaultBg="#cccccc"
         onClick={event => onClickCell({ event, type: 'col', col })}
         onContextMenu={event => onContextMenu({ event, type: 'col', col })}
       >
@@ -78,7 +75,7 @@ class Table extends Component {
     );
   }
 
-  _renderRowCells(row, idx) {
+  _renderRowCells(row, rowIdx) {
     const {
       columns,
       selectedCols,
@@ -90,35 +87,35 @@ class Table extends Component {
     } = this.props;
     return !row._renderRow_ ? (
       <Row key={row._key_} height={row._height_ || cellHeight}>
-        {columns.map(
-          col =>
-            !row._renderCell_ ? (
-              <Cell
-                key={col._key_}
-                width={col._width_ || cellWidth}
-                onClick={event =>
-                  onClickCell({ event, type: 'cell', row, col })
-                }
-                onContextMenu={event =>
-                  onContextMenu({ event, type: 'cell', row, col })
-                }
-                backgroundColor={
-                  selectedCols.includes(col._key_) ||
-                  selectedRows.includes(row._key_) ||
-                  col._selected_ ||
-                  row._selected_
-                    ? 'gray'
-                    : idx % 2 === 0
-                      ? '#ffffff'
-                      : '#f4f2f4'
-                }
-              >
-                {row[col._dataIndex_] || ''}
-              </Cell>
-            ) : (
-              row._renderCell_(row, col, selectedRows, selectedCols)
-            ),
-        )}
+        {isHover =>
+          columns.map(
+            (col, colIdx) =>
+              !row._renderCell_ ? (
+                <Cell
+                  key={col._key_}
+                  width={col._width_ || cellWidth}
+                  border={{ top: rowIdx !== 0, left: colIdx !== 0 }}
+                  isHover={isHover}
+                  isSelected={
+                    selectedCols.includes(col._key_) ||
+                    selectedRows.includes(row._key_) ||
+                    col._selected_ ||
+                    row._selected_
+                  }
+                  onClick={event =>
+                    onClickCell({ event, type: 'cell', row, col })
+                  }
+                  onContextMenu={event =>
+                    onContextMenu({ event, type: 'cell', row, col })
+                  }
+                >
+                  {row[col._dataIndex_] || ''}
+                </Cell>
+              ) : (
+                row._renderCell_(row, col, selectedRows, selectedCols)
+              ),
+          )
+        }
       </Row>
     ) : (
       row._renderRow_(row, columns, selectedRows, selectedCols)
@@ -134,7 +131,7 @@ Table.defaultProps = {
   width: '100%',
   height: '100%',
   cellWidth: '100px',
-  cellHeight: '50px',
+  cellHeight: '40px',
   onClickTable: () => {},
   onClickCell: () => {},
   onContextMenu: () => {},
