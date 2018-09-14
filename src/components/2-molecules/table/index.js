@@ -63,7 +63,8 @@ class Table extends Component {
       <Cell
         key={col._key_}
         width={col._width_ || cellWidth}
-        border={{ top: false, left: idx !== 0 }}
+        borderTop={null}
+        borderLeft={idx === 0 ? null : '1px #ebebeb solid'}
         defaultBg="#cccccc"
         onClick={event => onClickCell({ event, type: 'col', col })}
         onContextMenu={event => onContextMenu({ event, type: 'col', col })}
@@ -94,7 +95,8 @@ class Table extends Component {
                 <Cell
                   key={col._key_}
                   width={col._width_ || cellWidth}
-                  border={{ top: rowIdx !== 0, left: colIdx !== 0 }}
+                  borderTop={rowIdx === 0 ? null : '1px #ebebeb solid'}
+                  borderLeft={colIdx === 0 ? null : '1px #ebebeb solid'}
                   isHover={isHover}
                   isSelected={
                     selectedCols.includes(col._key_) ||
