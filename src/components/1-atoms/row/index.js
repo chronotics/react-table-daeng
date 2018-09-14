@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Row extends Component {
   constructor(props) {
@@ -33,5 +34,15 @@ class Row extends Component {
     this.setState({ isHover: false });
   }
 }
+
+Row.defaultProps = {
+  height: '30px',
+  children: () => null,
+};
+
+Row.propTypes = {
+  height: PropTypes.string,
+  children: PropTypes.func,
+};
 
 export default Row;
