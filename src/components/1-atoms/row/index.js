@@ -13,15 +13,15 @@ class Row extends Component {
 
   render() {
     const { _onMouseOver, _onMouseLeave } = this;
-    const { height, children } = this.props;
-    const { isHover } = this.state;
+    const { height, style, children, ...props } = this.props;
     return (
       <div
-        style={{ height, minHeight: height, display: 'flex' }}
+        style={{ height, minHeight: height, display: 'flex', ...style }}
         onMouseOver={_onMouseOver}
         onMouseLeave={_onMouseLeave}
+        {...props}
       >
-        {children(isHover)}
+        {children({ props: this.props, state: this.state })}
       </div>
     );
   }
@@ -37,11 +37,13 @@ class Row extends Component {
 
 Row.defaultProps = {
   height: '30px',
+  style: {},
   children: () => null,
 };
 
 Row.propTypes = {
   height: PropTypes.string,
+  style: PropTypes.object,
   children: PropTypes.func,
 };
 

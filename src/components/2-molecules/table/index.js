@@ -88,7 +88,7 @@ class Table extends Component {
     } = this.props;
     return !row._renderRow_ ? (
       <Row key={row._key_} height={row._height_ || cellHeight}>
-        {isHover =>
+        {({ state: { isHover } }) =>
           columns.map(
             (col, colIdx) =>
               !row._renderCell_ ? (
