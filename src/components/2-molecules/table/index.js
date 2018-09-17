@@ -24,6 +24,8 @@ class Table extends Component {
       width,
       height,
       cellHeight,
+      tableBodyMarginTop,
+      tableBodyMarginBottom,
       setScrollRef,
       onClickTable,
     } = this.props;
@@ -38,8 +40,17 @@ class Table extends Component {
         <TableHead innerRef={_tableHeader} height={cellHeight}>
           {columns.map(_renderColCells)}
         </TableHead>
-        <TableBody marginTop={cellHeight}>
+        <TableBody
+          marginTop={`calc(${cellHeight} + ${tableBodyMarginTop})`}
+          marginBottom={tableBodyMarginBottom}
+        >
           {rows.map(_renderRowCells)}
+          <div
+            style={{
+              height: tableBodyMarginBottom,
+              minHeight: tableBodyMarginBottom,
+            }}
+          />
         </TableBody>
       </Container>
     );
@@ -134,6 +145,8 @@ Table.defaultProps = {
   height: '100%',
   cellWidth: '100px',
   cellHeight: '40px',
+  tableBodyMarginTop: '',
+  tableBodyMarginBottom: '',
   onClickTable: () => {},
   onClickCell: () => {},
   onContextMenu: () => {},
@@ -174,6 +187,8 @@ Table.propTypes = {
   height: PropTypes.string,
   cellWidth: PropTypes.string,
   cellHeight: PropTypes.string,
+  tableBodyMarginTop: PropTypes.string,
+  tableBodyMarginBottom: PropTypes.string,
   onClickTable: PropTypes.func,
   onClickCell: PropTypes.func,
   onContextMenu: PropTypes.func,

@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 const TableBody = ({ marginTop, style, children, ...props }) => (
   <div
-    style={{ marginTop, display: 'flex', flexDirection: 'column', ...style }}
+    style={{
+      marginTop,
+      display: 'flex',
+      flexDirection: 'column',
+      ...style,
+    }}
     {...props}
   >
     {children}
