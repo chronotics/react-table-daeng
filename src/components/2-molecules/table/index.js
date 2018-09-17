@@ -40,10 +40,7 @@ class Table extends Component {
         <TableHead innerRef={_tableHeader} height={cellHeight}>
           {columns.map(_renderColCells)}
         </TableHead>
-        <TableBody
-          marginTop={`calc(${cellHeight} + ${tableBodyMarginTop})`}
-          marginBottom={tableBodyMarginBottom}
-        >
+        <TableBody marginTop={`calc(${cellHeight} + ${tableBodyMarginTop})`}>
           {rows.map(_renderRowCells)}
           <div
             style={{
