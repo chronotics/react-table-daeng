@@ -9,7 +9,8 @@ class TableHead extends Component {
         ref={innerRef}
         style={{
           height,
-          position: 'absolute',
+          minHeight: height,
+          position: 'relative',
           widht: '100%',
           display: 'flex',
           ...style,
